@@ -1,0 +1,14 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.lowwor.v2ex.ui.activity.MainActivity">
+    <item
+        android:id="@+id/action_menu"
+        android:title="menu"
+        app:showAsAction="withText|ifRoom" />
+    <item
+        android:id="@+id/action_add"
+        android:title="add"
+        android:icon="@drawable/ic_action_add"
+        app:showAsAction="withText|ifRoom" />
+</menu>
