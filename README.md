@@ -5,7 +5,7 @@ Under development.
 Libraries
 ---------
 
- * Dagger - http://square.github.io/dagger
+ * Dagger2 - https://github.com/google/dagger
  * ButterKnife - http://jakewharton.github.io/butterknife
  * Retrofit - http://square.github.io/retrofit
  * Glide  - https://github.com/bumptech/glide
