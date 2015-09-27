@@ -9,7 +9,6 @@ import android.text.style.BulletSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.LeadingMarginSpan;
 import android.text.style.TypefaceSpan;
-import android.util.Log;
 
 import org.xml.sax.XMLReader;
 
@@ -34,24 +33,10 @@ public class HtmlTagHandler implements Html.TagHandler {
         } else if (tag.equals("li") && !opening) {
             handleListTag(output);
         }
-        else if(tag.equalsIgnoreCase("code")) {
+        else if(tag.equalsIgnoreCase("code")||tag.equalsIgnoreCase("pre")) {
             if(opening) {
                 output.setSpan(new TypefaceSpan("monospace"), output.length(), output.length(), Spannable.SPAN_MARK_MARK);
             } else {
-                Log.d("COde Tag", "Code tag encountered");
-                Object obj = getLast(output, TypefaceSpan.class);
-                int where = output.getSpanStart(obj);
-
-
-                output.setSpan(new AbsoluteSizeSpan(35), where, output.length(), 0);
-                output.setSpan(new TypefaceSpan("monospace"), where, output.length(), 0);
-                output.setSpan(new ForegroundColorSpan(Color.BLUE), where, output.length(), 0);
-            }
-        }     else if(tag.equalsIgnoreCase("pre")) {
-            if(opening) {
-                output.setSpan(new TypefaceSpan("monospace"), output.length(), output.length(), Spannable.SPAN_MARK_MARK);
-            } else {
-                Log.d("COde Tag", "Code tag encountered");
                 Object obj = getLast(output, TypefaceSpan.class);
                 int where = output.getSpanStart(obj);
 

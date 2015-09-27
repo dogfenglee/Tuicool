@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.lowwor.tuicool.utils.GlideImageGetter;
+import com.lowwor.tuicool.utils.HtmlParser;
 import com.lowwor.tuicool.utils.HtmlTagHandler;
 
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class RichTextView extends TextView {
 //        }
 
         Spanned spanned = Html.fromHtml(
-              text, new GlideImageGetter(this), new HtmlTagHandler());
+                HtmlParser.parse(text), new GlideImageGetter(this), new HtmlTagHandler());
         SpannableStringBuilder htmlSpannable;
         if (spanned instanceof SpannableStringBuilder) {
             htmlSpannable = (SpannableStringBuilder) spanned;
