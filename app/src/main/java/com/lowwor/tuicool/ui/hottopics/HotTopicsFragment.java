@@ -32,7 +32,7 @@ import rx.schedulers.Schedulers;
 /**
  * Created by lowworker on 2015/9/20.
  */
-public class HotTopicsFragment extends BaseFragment {
+public class HotTopicsFragment extends BaseFragment implements CatalogAdapter.CatalogClickListener, HotTopicAdapter.HotTopicClickListener {
 
     @Inject
     TuicoolApiRepository mTuicoolApiRepository;
@@ -47,6 +47,8 @@ public class HotTopicsFragment extends BaseFragment {
     private List<HotTopicsItem> mHotTopics;
     private CatalogAdapter mCatalogAdapter;
     private HotTopicAdapter mHotTopicAdapter;
+
+    private HotTopicsWrapper mHotTopicsWrapper;
 
     @Nullable
     @Override
@@ -75,17 +77,28 @@ public class HotTopicsFragment extends BaseFragment {
         mCatalogManager = new LinearLayoutManager(getActivity());
         mCatalogRecycler.setLayoutManager(mCatalogManager);
         mCatalogs = new ArrayList<>();
-        mCatalogAdapter = new CatalogAdapter(mCatalogs,getActivity());
+        mCatalogAdapter = new CatalogAdapter(mCatalogs,getActivity(),this);
         mCatalogRecycler.setAdapter(mCatalogAdapter);
 
         mHotTopicManager = new LinearLayoutManager(getActivity());
         mHotTopicRecycler.setLayoutManager(mHotTopicManager);
         mHotTopics = new ArrayList<>();
-        mHotTopicAdapter = new HotTopicAdapter(mHotTopics,getActivity());
+        mHotTopicAdapter = new HotTopicAdapter(mHotTopics,getActivity(),this);
         mHotTopicRecycler.setAdapter(mHotTopicAdapter);
     }
 
 
+    @Override
+    public void onElementClick(int position) {
+        mHotTopics.clear();
+        mHotTopics.addAll(mHotTopicsWrapper.getCatalogs().get(position).getItems());
+        mHotTopicAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onHotTopicClick(int position) {
+        
+    }
 
     private void loadData() {
 
@@ -103,12 +116,17 @@ public class HotTopicsFragment extends BaseFragment {
     private void onHotTopicsReceived(HotTopicsWrapper hotTopicsWrapper) {
         Logger.i("onHotTopicsReceived" + hotTopicsWrapper.getCatalogs().get(0).getName());
 
+        mHotTopicsWrapper=hotTopicsWrapper;
+
         mCatalogs.addAll(hotTopicsWrapper.getCatalogs());
         mCatalogAdapter.notifyDataSetChanged();
 
         mHotTopics.addAll(hotTopicsWrapper.getCatalogs().get(0).getItems());
         mHotTopicAdapter.notifyDataSetChanged();
     }
+
+
+
 
     private void manageError(Throwable error) {
 

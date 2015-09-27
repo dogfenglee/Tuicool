@@ -25,10 +25,12 @@ import butterknife.ButterKnife;
 public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.ViewHolder> {
     Context mContext;
     List<HotTopicsCatalog> mCatalogs = new ArrayList<>();
+    CatalogClickListener mRecyclerClickListener;
 
-    public CatalogAdapter(List<HotTopicsCatalog> catalogs, Context context) {
+    public CatalogAdapter(List<HotTopicsCatalog> catalogs, Context context,CatalogClickListener recyclerClickListener) {
         this.mCatalogs = catalogs;
         mContext = context;
+        this.mRecyclerClickListener = recyclerClickListener;
     }
 
 
@@ -36,23 +38,14 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_catalog, viewGroup, false);
-        return new ViewHolder(v);
+        return new ViewHolder(v,mRecyclerClickListener);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
 
         HotTopicsCatalog catalog = mCatalogs.get(i);
-        viewHolder.mCatalogWrapper.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-
-        viewHolder.tvCatalog.setText(catalog.name);
-
+        viewHolder.bindHotTopic(catalog);
 
     }
 
@@ -62,13 +55,6 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.ViewHold
     }
 
 
-    public void initialize(List<HotTopicsCatalog> data) {
-
-        mCatalogs = data;
-        notifyDataSetChanged();
-
-    }
-
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -77,11 +63,28 @@ public class CatalogAdapter extends RecyclerView.Adapter<CatalogAdapter.ViewHold
         @Bind(R.id.catalog_wrapper)
         LinearLayout mCatalogWrapper;
 
-        public ViewHolder(View view) {
+        public ViewHolder(View view,CatalogClickListener recyclerClickListener) {
             super(view);
             ButterKnife.bind(this, view);
+            bindListener(view, recyclerClickListener);
+        }
 
+        public void bindHotTopic(HotTopicsCatalog catalog) {
+
+            tvCatalog.setText(catalog.name);
+        }
+
+        private void bindListener(View itemView, final CatalogClickListener recyclerClickListener) {
+
+            itemView.setOnClickListener(
+                  v ->  recyclerClickListener.onElementClick(getPosition())
+            );
         }
     }
+
+    public interface CatalogClickListener {
+        void onElementClick (int position);
+    }
+
 }
 

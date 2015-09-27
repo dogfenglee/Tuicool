@@ -11,4 +11,7 @@
 
     <color name="color_text_secondary">#000000</color>
 
+
+    <color name="color_hot_topic_item">#b3e5fc</color>
+
 </resources>

@@ -24,10 +24,12 @@ import butterknife.ButterKnife;
 public class HotTopicAdapter extends RecyclerView.Adapter<HotTopicAdapter.ViewHolder> {
     Context mContext;
     List<HotTopicsItem> mTopics = new ArrayList<>();
+    HotTopicClickListener mHotTopicClickListener;
 
-    public HotTopicAdapter(List<HotTopicsItem> topics, Context context) {
+    public HotTopicAdapter(List<HotTopicsItem> topics, Context context,HotTopicClickListener hotTopicClickListener) {
         this.mTopics = topics;
         mContext = context;
+        mHotTopicClickListener = hotTopicClickListener;
     }
 
 
@@ -35,7 +37,7 @@ public class HotTopicAdapter extends RecyclerView.Adapter<HotTopicAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_hot_topic, viewGroup, false);
-        return new ViewHolder(v);
+        return new ViewHolder(v,mHotTopicClickListener);
     }
 
     @Override
@@ -59,10 +61,24 @@ public class HotTopicAdapter extends RecyclerView.Adapter<HotTopicAdapter.ViewHo
         TextView tvName;
         @Bind(R.id.iv_avatar)
         ImageView ivAvatar;
-        public ViewHolder(View view) {
+        @Bind(R.id.iv_subscribe)
+        ImageView ivSubscribe;
+        public ViewHolder(View view,HotTopicClickListener hotTopicClickListener) {
             super(view);
             ButterKnife.bind(this, view);
+            bindListener(view,hotTopicClickListener);
 
         }
+
+        private void bindListener(View view, final HotTopicClickListener hotTopicClickListener) {
+
+            ivSubscribe.setOnClickListener(
+                    v -> hotTopicClickListener.onHotTopicClick(getPosition())
+            );
+        }
+    }
+
+    public interface HotTopicClickListener {
+        void onHotTopicClick (int position);
     }
 }
