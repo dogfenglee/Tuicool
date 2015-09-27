@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/coordinatorlayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -33,6 +34,7 @@
                 android:layout_height="match_parent"
                 >
 
+
                 <TextView
                     android:id="@+id/tv_title"
                     android:layout_width="match_parent"
@@ -63,17 +65,29 @@
                     android:textColor="#aaa"
                     android:textSize="12sp" />
 
+                <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_feed_title"
+                    >
+                <ProgressBar
+                    android:id="@+id/pb_loading"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
 
-
+                    android:indeterminate="true"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:visibility="gone"
+                    tools:visibility="visible"
+                    />
                 <com.lowwor.tuicool.ui.customview.RichTextView
                     android:id="@+id/tv_content"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_feed_title"
                     android:textSize="18sp"
                     android:lineSpacingExtra="1.25dp"
                     android:padding="8dp"/>
-
+            </RelativeLayout>
             </RelativeLayout>
 
     </android.support.v4.widget.NestedScrollView>

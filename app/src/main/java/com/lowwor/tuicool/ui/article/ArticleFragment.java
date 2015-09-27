@@ -7,6 +7,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.lowwor.tuicool.R;
@@ -41,6 +42,8 @@ public class ArticleFragment extends BaseFragment {
     TextView tvTime;
     @Bind(R.id.tv_content)
     RichTextView tvContent;
+    @Bind(R.id.pb_loading)
+    ProgressBar pbLoading;
 
 
     @Inject
@@ -73,7 +76,7 @@ public class ArticleFragment extends BaseFragment {
         ((ArticleActivity) getActivity()).articleComponent().inject(this);
     }
     private void loadData(String articleId) {
-
+        pbLoading.setVisibility(View.VISIBLE);
         mTuicoolApiRepository.getArticleById(articleId,1).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -83,13 +86,15 @@ public class ArticleFragment extends BaseFragment {
 
 
     private void onArticleReceived(ArticleWrapper articleWrapper) {
+
+        pbLoading.setVisibility(View.GONE);
         mArticle = articleWrapper.getArticle();
 //        Logger.i("onTopicsReceived" + mArticle.content);
         tvContent.setRichText(mArticle.content);
     }
 
     private void manageError(Throwable error) {
-
+        pbLoading.setVisibility(View.GONE);
         if (error instanceof NetworkUknownHostException)
             showError("It has not been possible to resolve V2EX");
 
