@@ -19,7 +19,7 @@ public class GlideImageGetter implements Html.ImageGetter {
     private TextView mContainer;
     private int mMaxWidth;
 
-    public GlideImageGetter(  TextView container) {
+    public GlideImageGetter(TextView container) {
         mContainer = container;
     }
 
@@ -34,13 +34,13 @@ public class GlideImageGetter implements Html.ImageGetter {
                 int width;
                 int height;
                 int resourceWidth = resource.getIntrinsicWidth();
-                int resourceHeight =  resource.getIntrinsicHeight();
-                if(mMaxWidth> resourceWidth+150){
-     width = mMaxWidth;
-     height = mMaxWidth * resourceHeight / resourceWidth;
-            }else{
-                    width =resourceWidth;
+                int resourceHeight = resource.getIntrinsicHeight();
+                if (mMaxWidth > resourceWidth ) {
+                    width = resourceWidth;
                     height = resourceHeight;
+                } else {
+                    width = mMaxWidth;
+                    height = mMaxWidth * resourceHeight / resourceWidth;
                 }
 
 
