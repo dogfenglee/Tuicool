@@ -26,6 +26,7 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -43,6 +44,7 @@ public class TopicFragment extends BaseFragment {
     private List<Article> mArticles;
     private TopicAdapter mTopicAdapter;
     private int mPage;
+    private  Subscription mSubscription;
 
     @Inject
     TuicoolApiRepository mTuicoolApiRepository;
@@ -57,21 +59,29 @@ public class TopicFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_topic, container, false);
-        ButterKnife.bind(this, view);
-        initializeRecyclerView();
-        initializeSwipeRefresh();
         return view;
     }
 
     @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
+        ButterKnife.bind(this, view);
+        initializeRecyclerView();
+        initializeSwipeRefresh();
         initializeDependencyInjector();
         mPage = 0;
         loadData(getTopicId(), mPage);
+
     }
 
-    private String getTopicId(){
-     return    getArguments().getString("topicId");
+
+    private int getTopicId() {
+        return getArguments().getInt("topicId");
     }
 
     private void initializeRecyclerView() {
@@ -79,7 +89,7 @@ public class TopicFragment extends BaseFragment {
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerview.setLayoutManager(mLinearLayoutManager);
         mArticles = new ArrayList<>();
-        mTopicAdapter = new TopicAdapter(mArticles,getActivity());
+        mTopicAdapter = new TopicAdapter(mArticles, getActivity());
         mRecyclerview.setAdapter(mTopicAdapter);
         mRecyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -90,32 +100,29 @@ public class TopicFragment extends BaseFragment {
 
                 if (lastVisibleItem > totalItemCount - 4 && dy > 0) {
 
-                    mPage++;
-                    loadData(getTopicId(), mPage);
+                    loadData(getTopicId(), mPage + 1);
                 }
 
             }
         });
-
-
     }
-
 
     private void initializeSwipeRefresh() {
         mSwipeRefresh.setColorSchemeResources(android.R.color.holo_blue_light, android.R.color.holo_red_light, android.R.color.holo_orange_light, android.R.color.holo_green_light);
-        mSwipeRefresh.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
+        mSwipeRefresh.setOnRefreshListener(
+                () -> {
+                    mPage = 0;
+                    loadData(getTopicId(), mPage);
+                }
 
-                mPage = 0;
-                loadData(getArguments().getString("topicId"), mPage);
-            }
-        });
+        );
     }
 
-    private void loadData(String topicId,int page) {
-
-        mTuicoolApiRepository.getArticleListByTopicId(topicId,page).subscribeOn(Schedulers.io())
+    private void loadData(int topicId, int page) {
+        if (mSubscription != null && !mSubscription.isUnsubscribed()) {
+            return;
+        }
+       mSubscription = mTuicoolApiRepository.getArticleListByTopicId(topicId, page).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         articleList -> onArticleListReceived(articleList),
@@ -127,20 +134,25 @@ public class TopicFragment extends BaseFragment {
     }
 
     private void onArticleListReceived(ArticlesWrapper articlesWrapper) {
-        Logger.i("onTopicsReceived" + articlesWrapper.getArticles().get(0).feedTitle);
-        if(mPage==0){
+        Logger.i("onTopicsReceived" + articlesWrapper.getArticles().size());
+
+        if (mPage == 0) {
             mArticles.clear();
         }
-        mSwipeRefresh.setRefreshing(false);
-        mArticles.addAll(articlesWrapper.getArticles());
+        mPage++;
+
+        setRefresh(false);
+
+        if (!articlesWrapper.getArticles().isEmpty()) {
+            mArticles.addAll(articlesWrapper.getArticles());
+        } else {
+
+        }
         mTopicAdapter.notifyDataSetChanged();
     }
 
     private void manageError(Throwable error) {
-
-        if(mPage!=0){
-            mPage--;
-        }
+        setRefresh(false);
         if (error instanceof NetworkUknownHostException)
             showError("It has not been possible to resolve V2EX");
 
@@ -160,10 +172,26 @@ public class TopicFragment extends BaseFragment {
         });
     }
 
+    private void setRefresh(boolean isRefresh) {
+        if (mSwipeRefresh == null) {
+            return;
+        }
+        if (isRefresh&&getUserVisibleHint()) {
+            mSwipeRefresh.post(
+                    () -> mSwipeRefresh.setRefreshing(true)
+            );
+        }else{
+            mSwipeRefresh.setRefreshing(false);
+        }
+
+    }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+        mSubscription.unsubscribe();
+
     }
 
 

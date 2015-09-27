@@ -37,7 +37,7 @@ public class TuicoolApiRepository {
     }
 
 
-    public Observable<ArticlesWrapper> getArticleListByTopicId(String topicId, int page) {
+    public Observable<ArticlesWrapper> getArticleListByTopicId(int topicId, int page) {
         return mTuicoolService.getArticleListByTopicId(topicId,page,2,30);
     }
 

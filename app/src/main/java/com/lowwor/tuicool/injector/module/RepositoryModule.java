@@ -2,6 +2,8 @@ package com.lowwor.tuicool.injector.module;
 
 
 import com.lowwor.tuicool.api.TuicoolApiRepository;
+import com.lowwor.tuicool.db.TuicoolDatabaseRepository;
+import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
 import javax.inject.Singleton;
 
@@ -19,5 +21,15 @@ public class RepositoryModule {
     TuicoolApiRepository provideTuicoolApiRepository(){
         return  new TuicoolApiRepository();
     }
+
+
+
+    @Provides
+    @Singleton
+    TuicoolDatabaseRepository provideTuicoolDatabaseRepository(  StorIOSQLite storIOSQLite){
+        return  new TuicoolDatabaseRepository(storIOSQLite);
+    }
+
+
 
 }

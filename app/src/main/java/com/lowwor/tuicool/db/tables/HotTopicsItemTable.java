@@ -2,6 +2,8 @@ package com.lowwor.tuicool.db.tables;
 
 import android.support.annotation.NonNull;
 
+import com.pushtorefresh.storio.sqlite.queries.Query;
+
 /**
  * Created by lowworker on 2015/9/27.
  */
@@ -9,7 +11,7 @@ public class HotTopicsItemTable {
 
 
     @NonNull
-    public static final String TABLE = "subscribes";
+    public static final String TABLE = "hot_topics_item";
 
 
     @NonNull
@@ -22,6 +24,12 @@ public class HotTopicsItemTable {
     private HotTopicsItemTable() {
         throw new IllegalStateException("No instances please");
     }
+
+    @NonNull
+    public static final Query QUERY_ALL = Query.builder()
+            .table(TABLE)
+            .build();
+
 
 
     @NonNull

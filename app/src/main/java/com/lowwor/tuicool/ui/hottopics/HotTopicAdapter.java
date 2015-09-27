@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lowwor.tuicool.R;
+import com.lowwor.tuicool.db.TuicoolDatabaseRepository;
 import com.lowwor.tuicool.model.HotTopicsItem;
 
 import java.util.ArrayList;
@@ -25,19 +26,22 @@ public class HotTopicAdapter extends RecyclerView.Adapter<HotTopicAdapter.ViewHo
     Context mContext;
     List<HotTopicsItem> mTopics = new ArrayList<>();
     HotTopicClickListener mHotTopicClickListener;
+    private static enum SubscribeType { SUBSCRIBED, NOT_SUBSCRIBED }
 
-    public HotTopicAdapter(List<HotTopicsItem> topics, Context context,HotTopicClickListener hotTopicClickListener) {
+    TuicoolDatabaseRepository mTuicoolDatabaseRepository;
+
+    public HotTopicAdapter(List<HotTopicsItem> topics, Context context, HotTopicClickListener hotTopicClickListener, TuicoolDatabaseRepository tuicoolDatabaseRepository) {
         this.mTopics = topics;
         mContext = context;
         mHotTopicClickListener = hotTopicClickListener;
+        this.mTuicoolDatabaseRepository = tuicoolDatabaseRepository;
     }
-
 
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_hot_topic, viewGroup, false);
-        return new ViewHolder(v,mHotTopicClickListener);
+        return new ViewHolder(v, mHotTopicClickListener);
     }
 
     @Override
@@ -47,6 +51,14 @@ public class HotTopicAdapter extends RecyclerView.Adapter<HotTopicAdapter.ViewHo
 
         viewHolder.tvName.setText(hotTopic.name);
         Glide.with(mContext).load(hotTopic.image).into(viewHolder.ivAvatar);
+
+        if (mTuicoolDatabaseRepository.isSubscribe(hotTopic)) {
+            viewHolder.ivSubscribe.setTag(R.id.iv_subscribe, SubscribeType.SUBSCRIBED);
+            viewHolder.ivSubscribe.setBackgroundResource(R.drawable.ic_action_done);
+        } else {
+            viewHolder.ivSubscribe.setTag(R.id.iv_subscribe, SubscribeType.NOT_SUBSCRIBED);
+            viewHolder.ivSubscribe.setBackgroundResource(R.drawable.ic_action_add);
+        }
 
     }
 
@@ -63,22 +75,33 @@ public class HotTopicAdapter extends RecyclerView.Adapter<HotTopicAdapter.ViewHo
         ImageView ivAvatar;
         @Bind(R.id.iv_subscribe)
         ImageView ivSubscribe;
-        public ViewHolder(View view,HotTopicClickListener hotTopicClickListener) {
+
+        public ViewHolder(View view, HotTopicClickListener hotTopicClickListener) {
             super(view);
             ButterKnife.bind(this, view);
-            bindListener(view,hotTopicClickListener);
+            bindListener(view, hotTopicClickListener);
 
         }
 
         private void bindListener(View view, final HotTopicClickListener hotTopicClickListener) {
 
             ivSubscribe.setOnClickListener(
-                    v -> hotTopicClickListener.onHotTopicClick(getPosition())
+                    v ->
+                    {
+                        SubscribeType subscibedType = (SubscribeType)ivSubscribe.getTag(R.id.iv_subscribe);
+                        if (subscibedType== SubscribeType.SUBSCRIBED) {
+                            ivSubscribe.setBackgroundResource(R.drawable.ic_action_add);
+                        } else if(subscibedType== SubscribeType.NOT_SUBSCRIBED){
+                            ivSubscribe.setBackgroundResource(R.drawable.ic_action_done);
+                        }
+                        hotTopicClickListener.onHotTopicClick(getPosition());
+
+                    }
             );
         }
     }
 
     public interface HotTopicClickListener {
-        void onHotTopicClick (int position);
+        void onHotTopicClick(int position);
     }
 }

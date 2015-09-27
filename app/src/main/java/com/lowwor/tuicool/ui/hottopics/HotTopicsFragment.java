@@ -13,6 +13,7 @@ import com.lowwor.tuicool.api.TuicoolApiRepository;
 import com.lowwor.tuicool.api.exceptions.NetworkErrorException;
 import com.lowwor.tuicool.api.exceptions.NetworkTimeOutException;
 import com.lowwor.tuicool.api.exceptions.NetworkUknownHostException;
+import com.lowwor.tuicool.db.TuicoolDatabaseRepository;
 import com.lowwor.tuicool.model.HotTopicsCatalog;
 import com.lowwor.tuicool.model.HotTopicsItem;
 import com.lowwor.tuicool.model.HotTopicsWrapper;
@@ -36,6 +37,8 @@ public class HotTopicsFragment extends BaseFragment implements CatalogAdapter.Ca
 
     @Inject
     TuicoolApiRepository mTuicoolApiRepository;
+    @Inject
+    TuicoolDatabaseRepository mTuicoolDatabaseRepository;
     @Bind(R.id.catalog_recycler)
     RecyclerView mCatalogRecycler;
     @Bind(R.id.hot_topic_recycler)
@@ -56,8 +59,8 @@ public class HotTopicsFragment extends BaseFragment implements CatalogAdapter.Ca
 
 
         View view = inflater.inflate(R.layout.fragment_hot_topics, container, false);
-        ButterKnife.bind(this, view);
-        initializeRecyclerView();
+
+        initializeDependencyInjector();
         return view;
     }
 
@@ -65,8 +68,9 @@ public class HotTopicsFragment extends BaseFragment implements CatalogAdapter.Ca
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        initializeDependencyInjector();
 
+        ButterKnife.bind(this, view);
+        initializeRecyclerView();
         loadData();
     }
 
@@ -77,13 +81,13 @@ public class HotTopicsFragment extends BaseFragment implements CatalogAdapter.Ca
         mCatalogManager = new LinearLayoutManager(getActivity());
         mCatalogRecycler.setLayoutManager(mCatalogManager);
         mCatalogs = new ArrayList<>();
-        mCatalogAdapter = new CatalogAdapter(mCatalogs,getActivity(),this);
+        mCatalogAdapter = new CatalogAdapter(mCatalogs, getActivity(), this);
         mCatalogRecycler.setAdapter(mCatalogAdapter);
 
         mHotTopicManager = new LinearLayoutManager(getActivity());
         mHotTopicRecycler.setLayoutManager(mHotTopicManager);
         mHotTopics = new ArrayList<>();
-        mHotTopicAdapter = new HotTopicAdapter(mHotTopics,getActivity(),this);
+        mHotTopicAdapter = new HotTopicAdapter(mHotTopics, getActivity(), this,mTuicoolDatabaseRepository);
         mHotTopicRecycler.setAdapter(mHotTopicAdapter);
     }
 
@@ -97,8 +101,17 @@ public class HotTopicsFragment extends BaseFragment implements CatalogAdapter.Ca
 
     @Override
     public void onHotTopicClick(int position) {
-        
+        HotTopicsItem hotTopic = mHotTopics.get(position);
+
+        if (mTuicoolDatabaseRepository.isSubscribe(hotTopic)) {
+            mTuicoolDatabaseRepository.removeHotTopic(hotTopic);
+        } else {
+            mTuicoolDatabaseRepository.addHotTopic(hotTopic);
+        }
+
+
     }
+
 
     private void loadData() {
 
@@ -116,7 +129,7 @@ public class HotTopicsFragment extends BaseFragment implements CatalogAdapter.Ca
     private void onHotTopicsReceived(HotTopicsWrapper hotTopicsWrapper) {
         Logger.i("onHotTopicsReceived" + hotTopicsWrapper.getCatalogs().get(0).getName());
 
-        mHotTopicsWrapper=hotTopicsWrapper;
+        mHotTopicsWrapper = hotTopicsWrapper;
 
         mCatalogs.addAll(hotTopicsWrapper.getCatalogs());
         mCatalogAdapter.notifyDataSetChanged();
@@ -124,8 +137,6 @@ public class HotTopicsFragment extends BaseFragment implements CatalogAdapter.Ca
         mHotTopics.addAll(hotTopicsWrapper.getCatalogs().get(0).getItems());
         mHotTopicAdapter.notifyDataSetChanged();
     }
-
-
 
 
     private void manageError(Throwable error) {

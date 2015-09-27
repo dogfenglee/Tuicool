@@ -3,6 +3,7 @@ package com.lowwor.tuicool.injector.component;
 import com.lowwor.tuicool.injector.FragmentScope;
 import com.lowwor.tuicool.injector.module.FragmentModule;
 import com.lowwor.tuicool.injector.module.TopicModule;
+import com.lowwor.tuicool.ui.topic.TabsHolderFragment;
 import com.lowwor.tuicool.ui.topic.TopicFragment;
 
 import dagger.Component;
@@ -15,4 +16,5 @@ import dagger.Component;
 public interface TopicComponent {
 
     void inject(TopicFragment fragment);
+    void inject(TabsHolderFragment fragment);
 }

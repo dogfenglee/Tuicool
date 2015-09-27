@@ -7,9 +7,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 
-import com.lowwor.tuicool.R;
+import com.lowwor.tuicool.model.HotTopicsItem;
+import com.orhanobut.logger.Logger;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,35 +18,34 @@ import java.util.List;
 public class TabsPagerAdapter extends FragmentStatePagerAdapter {
 
     private Context mContext;
-    String[] mTabTitles;
-    String[] mTopicIds  ;
-    private List<TopicFragment> mFragments = new ArrayList<>();
-    public TabsPagerAdapter(Context context,FragmentManager fm) {
+    private List<HotTopicsItem> mHotTopics;
+    public TabsPagerAdapter(Context context,FragmentManager fm,List<HotTopicsItem> hotTopics) {
         super(fm);
         this.mContext = context;
-
-        mTabTitles = mContext.getResources().getStringArray(R.array.v2ex_favorite_tab_titles);
-        mTopicIds = mContext.getResources().getStringArray(R.array.v2ex_favorite_tab_paths);
-        initFragments();
-
-        notifyDataSetChanged();
+        mHotTopics = hotTopics;
     }
 
     @Override
     public Fragment getItem(int position) {
-
-       return mFragments.get(position);
+        TopicFragment fragment = new TopicFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt("topicId", mHotTopics.get(position).id);
+        bundle.putBoolean("attach_main", true);
+        bundle.putBoolean("show_menu", false);
+        fragment.setArguments(bundle);
+       return fragment;
     }
 
     @Override
     public int getCount() {
-        return mTabTitles.length;
+        return mHotTopics.size();
     }
 
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mTabTitles[position];
+        Logger.i(mHotTopics.get(position).name);
+        return mHotTopics.get(position).name;
     }
 
 
@@ -56,15 +55,5 @@ public class TabsPagerAdapter extends FragmentStatePagerAdapter {
         return PagerAdapter.POSITION_NONE;
     }
 
-    private void initFragments() {
-        for (int i = 0; i < mTabTitles.length; i++) {
-            TopicFragment fragment = new TopicFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("topicId", mTopicIds[i]);
-            bundle.putBoolean("attach_main", true);
-            bundle.putBoolean("show_menu", false);
-            fragment.setArguments(bundle);
-            mFragments.add(fragment);
-        }
-    }
+
 }

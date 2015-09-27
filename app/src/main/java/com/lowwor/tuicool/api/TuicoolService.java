@@ -18,7 +18,7 @@ public interface TuicoolService {
 
 
     @GET("/topics/{topicId}.json")
-    Observable<ArticlesWrapper> getArticleListByTopicId(@Path("topicId")String topicId,@Query("pn")int page,@Query("lang")int lang,@Query("size")int size);
+    Observable<ArticlesWrapper> getArticleListByTopicId(@Path("topicId")int topicId,@Query("pn")int page,@Query("lang")int lang,@Query("size")int size);
 
 
     @GET("/articles/{articleId}.json")
