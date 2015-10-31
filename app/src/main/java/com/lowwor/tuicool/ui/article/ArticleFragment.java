@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.ProgressBar;
 
@@ -19,6 +21,7 @@ import com.lowwor.tuicool.api.exceptions.NetworkUknownHostException;
 import com.lowwor.tuicool.model.Article;
 import com.lowwor.tuicool.model.ArticleWrapper;
 import com.lowwor.tuicool.ui.base.BaseFragment;
+import com.orhanobut.logger.Logger;
 
 import javax.inject.Inject;
 
@@ -36,7 +39,7 @@ public class ArticleFragment extends BaseFragment {
     @Bind(R.id.pb_loading)
     ProgressBar pbLoading;
     @Bind(R.id.webview)
-    WebView mWebview;
+    WebView mWebView;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
 
@@ -50,9 +53,9 @@ public class ArticleFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_article, container, false);
         ButterKnife.bind(this, view);
-
         mArticle = getArguments().getParcelable("model");
         initToolbar();
+        initWebview();
         return view;
 
     }
@@ -69,9 +72,10 @@ public class ArticleFragment extends BaseFragment {
     private void initializeDependencyInjector() {
         ((ArticleActivity) getActivity()).articleComponent().inject(this);
     }
+
     private void loadData(String articleId) {
         pbLoading.setVisibility(View.VISIBLE);
-        mTuicoolApiRepository.getArticleById(articleId,1).subscribeOn(Schedulers.io())
+        mTuicoolApiRepository.getArticleById(articleId, 1).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         articlewrapper -> onArticleReceived(articlewrapper),
@@ -84,7 +88,7 @@ public class ArticleFragment extends BaseFragment {
         pbLoading.setVisibility(View.GONE);
         mArticle = articleWrapper.getArticle();
 //        Logger.i("onTopicsReceived" + mArticle.content);
-        mWebview.loadDataWithBaseURL(null, mArticle.content, "text/html", "UTF-8", null);
+        mWebView.loadDataWithBaseURL(null, mArticle.content, "text/html", "UTF-8", null);
 //        Logger.i(mArticle.content);
     }
 
@@ -107,7 +111,14 @@ public class ArticleFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (mWebView != null) mWebView.destroy();
         ButterKnife.unbind(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mWebView != null) mWebView.onResume();
     }
 
     private void initToolbar() {
@@ -115,8 +126,36 @@ public class ArticleFragment extends BaseFragment {
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
         if (actionBar != null) {
             actionBar.setTitle(mArticle.title);
-            actionBar.setSubtitle(mArticle.feedTitle+"   "+mArticle.time);
+            actionBar.setSubtitle(mArticle.feedTitle + "   " + mArticle.time);
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
     }
+
+    private void initWebview() {
+        WebSettings settings = mWebView.getSettings();
+        settings.setJavaScriptEnabled(true);
+        settings.setLoadWithOverviewMode(true);
+        settings.setAppCacheEnabled(true);
+        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+        settings.setSupportZoom(true);
+        mWebView.setWebChromeClient(new ChromeClient());
+    }
+
+    private class ChromeClient extends WebChromeClient {
+
+        @Override
+        public void onProgressChanged(WebView view, int newProgress) {
+            super.onProgressChanged(view, newProgress);
+
+            Logger.i(newProgress + "");
+            pbLoading.setProgress(newProgress);
+            if (newProgress == 100) {
+                pbLoading.setVisibility(View.GONE);
+            } else {
+                pbLoading.setVisibility(View.VISIBLE);
+            }
+        }
+
+    }
+
 }
