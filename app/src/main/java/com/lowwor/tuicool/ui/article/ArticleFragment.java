@@ -2,13 +2,14 @@ package com.lowwor.tuicool.ui.article;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebView;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.lowwor.tuicool.R;
 import com.lowwor.tuicool.api.TuicoolApiRepository;
@@ -18,7 +19,6 @@ import com.lowwor.tuicool.api.exceptions.NetworkUknownHostException;
 import com.lowwor.tuicool.model.Article;
 import com.lowwor.tuicool.model.ArticleWrapper;
 import com.lowwor.tuicool.ui.base.BaseFragment;
-import com.lowwor.tuicool.ui.customview.RichTextView;
 
 import javax.inject.Inject;
 
@@ -32,18 +32,13 @@ import rx.schedulers.Schedulers;
  */
 public class ArticleFragment extends BaseFragment {
 
-    @Bind(R.id.toolbar)
-    Toolbar mToolbar;
-    @Bind(R.id.tv_title)
-    TextView tvTitle;
-    @Bind(R.id.tv_feed_title)
-    TextView tvFeedTitle;
-    @Bind(R.id.tv_time)
-    TextView tvTime;
-    @Bind(R.id.tv_content)
-    RichTextView tvContent;
+
     @Bind(R.id.pb_loading)
     ProgressBar pbLoading;
+    @Bind(R.id.webview)
+    WebView mWebview;
+    @Bind(R.id.toolbar)
+    Toolbar mToolbar;
 
 
     @Inject
@@ -55,10 +50,9 @@ public class ArticleFragment extends BaseFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_article, container, false);
         ButterKnife.bind(this, view);
+
         mArticle = getArguments().getParcelable("model");
-        tvTitle.setText(mArticle.title);
-        tvTime.setText(mArticle.time);
-        tvFeedTitle.setText(mArticle.feedTitle);
+        initToolbar();
         return view;
 
     }
@@ -90,7 +84,8 @@ public class ArticleFragment extends BaseFragment {
         pbLoading.setVisibility(View.GONE);
         mArticle = articleWrapper.getArticle();
 //        Logger.i("onTopicsReceived" + mArticle.content);
-        tvContent.setRichText(mArticle.content);
+        mWebview.loadDataWithBaseURL(null, mArticle.content, "text/html", "UTF-8", null);
+//        Logger.i(mArticle.content);
     }
 
     private void manageError(Throwable error) {
@@ -106,17 +101,22 @@ public class ArticleFragment extends BaseFragment {
     }
 
     public void showError(String error) {
-        Snackbar.make(tvContent, error, Snackbar.LENGTH_LONG).setAction("Retry", new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-            }
-        });
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    private void initToolbar() {
+        ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
+        ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle(mArticle.title);
+            actionBar.setSubtitle(mArticle.feedTitle+"   "+mArticle.time);
+            actionBar.setDisplayHomeAsUpEnabled(false);
+        }
     }
 }
