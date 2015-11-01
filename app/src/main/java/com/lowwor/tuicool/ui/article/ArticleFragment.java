@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
 
 import com.lowwor.tuicool.R;
@@ -47,6 +48,10 @@ public class ArticleFragment extends BaseFragment {
     @Inject
     TuicoolApiRepository mTuicoolApiRepository;
     private Article mArticle;
+
+    private String codeScrollable = "<style>pre{overflow-x: auto;overflow-y: auto;}</style>";
+    private String codePrettifyJs =  " <script src=\"file:///android_asset/js/run_prettify.js\"></script>";
+    private String imageAutoScale = "<style>img{display: inline;height: auto;max-width: 100%;}</style>";
 
     @Nullable
     @Override
@@ -87,9 +92,7 @@ public class ArticleFragment extends BaseFragment {
 
         pbLoading.setVisibility(View.GONE);
         mArticle = articleWrapper.getArticle();
-//        Logger.i("onTopicsReceived" + mArticle.content);
-        mWebView.loadDataWithBaseURL(null, mArticle.content, "text/html", "UTF-8", null);
-//        Logger.i(mArticle.content);
+        mWebView.loadDataWithBaseURL(null, getHtml(mArticle), "text/html", "UTF-8", null);
     }
 
     private void manageError(Throwable error) {
@@ -136,9 +139,10 @@ public class ArticleFragment extends BaseFragment {
         settings.setJavaScriptEnabled(true);
         settings.setLoadWithOverviewMode(true);
         settings.setAppCacheEnabled(true);
-        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
-        settings.setSupportZoom(true);
+        settings.setSupportZoom(false);
+        settings.setBuiltInZoomControls(false);
         mWebView.setWebChromeClient(new ChromeClient());
+        mWebView.setWebViewClient(new CustomWebViewClient());
     }
 
     private class ChromeClient extends WebChromeClient {
@@ -157,5 +161,24 @@ public class ArticleFragment extends BaseFragment {
         }
 
     }
+
+    private class CustomWebViewClient extends WebViewClient{
+        @Override
+        public void onPageFinished(WebView view, String url) {
+            super.onPageFinished(view, url);
+        }
+    }
+
+    private String getHtml(Article article){
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(codePrettifyJs);
+        stringBuilder.append(imageAutoScale);
+        stringBuilder.append(codeScrollable);
+        stringBuilder.append("<meta name=viewport content=target-densitydpi=medium-dpi, width=device-width/>");
+        stringBuilder.append(mArticle.content);
+        return stringBuilder.toString();
+    }
+
+
 
 }
