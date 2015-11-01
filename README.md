@@ -11,3 +11,7 @@ Libraries
  * Glide  - https://github.com/bumptech/glide
  * OkHttp - http://square.github.io/okhttp
  * RxJava - https://github.com/ReactiveX/RxJava
+ * Rx-Preferences - https://github.com/f2prateek/rx-preferences
+ * Storio - https://github.com/pushtorefresh/storio
+
+

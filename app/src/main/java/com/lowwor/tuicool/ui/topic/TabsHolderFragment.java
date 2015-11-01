@@ -1,6 +1,8 @@
 package com.lowwor.tuicool.ui.topic;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
@@ -17,6 +19,7 @@ import com.lowwor.tuicool.db.TuicoolDatabaseRepository;
 import com.lowwor.tuicool.model.HotTopicsItem;
 import com.lowwor.tuicool.ui.base.BaseFragment;
 import com.lowwor.tuicool.ui.hottopics.HotTopicsActivity;
+import com.lowwor.tuicool.utils.Constants;
 
 import java.util.List;
 
@@ -120,6 +123,15 @@ public class TabsHolderFragment extends BaseFragment {
                             Intent intent = new Intent(getActivity(), HotTopicsActivity.class);
                             startActivity(intent);
                             break;
+                        case R.id.action_lang_multi:
+                            setLanguage(Constants.LANGUAGE_MULTI);
+                            break;
+                        case R.id.action_lang_cn:
+                            setLanguage(Constants.LANGUAGE_CN);
+                            break;
+                        case R.id.action_lang_en:
+                            setLanguage(Constants.LANGUAGE_EN);
+                            break;
 
                     }
                     return true;
@@ -128,5 +140,10 @@ public class TabsHolderFragment extends BaseFragment {
         );
     }
 
-
+    private void setLanguage(int language){
+        SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.SP_TUICOOL, Context.MODE_PRIVATE);
+        SharedPreferences.Editor mEditor = mSharedPreferences.edit();
+        mEditor.putInt(Constants.SP_KEY_LANGUAGE, language);
+        mEditor.commit();
+    }
 }

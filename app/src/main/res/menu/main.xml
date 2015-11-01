@@ -2,13 +2,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.lowwor.v2ex.ui.activity.MainActivity">
-    <item
-        android:id="@+id/action_menu"
-        android:title="menu"
-        app:showAsAction="withText|ifRoom" />
+
     <item
         android:id="@+id/action_add"
         android:title="add"
         android:icon="@drawable/ic_action_add"
         app:showAsAction="withText|ifRoom" />
+
+    <item
+        android:id="@+id/action_lang_multi"
+        android:title="中英混合"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/action_lang_cn"
+        android:title="中文内容"
+        app:showAsAction="collapseActionView" />
+    <item
+        android:id="@+id/action_lang_en"
+        android:title="英文内容"
+        app:showAsAction="collapseActionView" />
 </menu>

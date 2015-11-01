@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.f2prateek.rx.preferences.Preference;
+import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.lowwor.tuicool.R;
 import com.lowwor.tuicool.api.TuicoolApiRepository;
 import com.lowwor.tuicool.api.exceptions.NetworkErrorException;
@@ -17,7 +19,7 @@ import com.lowwor.tuicool.api.exceptions.NetworkUknownHostException;
 import com.lowwor.tuicool.model.Article;
 import com.lowwor.tuicool.model.ArticlesWrapper;
 import com.lowwor.tuicool.ui.base.BaseFragment;
-import com.orhanobut.logger.Logger;
+import com.lowwor.tuicool.utils.Constants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +28,11 @@ import javax.inject.Inject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Subscriber;
 import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by lowworker on 2015/9/12.
@@ -44,10 +48,16 @@ public class TopicFragment extends BaseFragment {
     private List<Article> mArticles;
     private TopicAdapter mTopicAdapter;
     private int mPage;
+    private int mLanguage;
+    Preference<Integer> mLanguagePreference;
     private  Subscription mSubscription;
+    CompositeSubscription mSubscriptions = new CompositeSubscription();
+
 
     @Inject
     TuicoolApiRepository mTuicoolApiRepository;
+    @Inject
+    RxSharedPreferences mRxSharedPreferences;
 
     public static TopicFragment newInstance() {
 
@@ -63,22 +73,44 @@ public class TopicFragment extends BaseFragment {
     }
 
     @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-    }
-
-    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         ButterKnife.bind(this, view);
         initializeRecyclerView();
         initializeSwipeRefresh();
         initializeDependencyInjector();
         mPage = 0;
-        loadData(getTopicId(), mPage);
+
+        bindLanguage();
+        loadData(getTopicId(), mPage, mLanguage);
 
     }
 
+
+    private void bindLanguage(){
+        mLanguagePreference = mRxSharedPreferences.getInteger(Constants.SP_KEY_LANGUAGE,Constants.LANGUAGE_MULTI);
+        mSubscriptions.add(mLanguagePreference.asObservable()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<Integer>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onNext(Integer integer) {
+                        mPage = 0;
+                        mLanguage = integer;
+                        setRefresh(true);
+                        mRecyclerview.scrollToPosition(0);
+                        loadData(getTopicId(), mPage, mLanguage);
+                    }
+                }));
+    }
 
     private int getTopicId() {
         return getArguments().getInt("topicId");
@@ -100,7 +132,7 @@ public class TopicFragment extends BaseFragment {
 
                 if (lastVisibleItem > totalItemCount - 4 && dy > 0) {
 
-                    loadData(getTopicId(), mPage + 1);
+                    loadData(getTopicId(), mPage + 1, mLanguage);
                 }
 
             }
@@ -112,17 +144,17 @@ public class TopicFragment extends BaseFragment {
         mSwipeRefresh.setOnRefreshListener(
                 () -> {
                     mPage = 0;
-                    loadData(getTopicId(), mPage);
+                    loadData(getTopicId(), mPage, mLanguage);
                 }
 
         );
     }
 
-    private void loadData(int topicId, int page) {
+    private void loadData(int topicId, int page,int lang) {
         if (mSubscription != null && !mSubscription.isUnsubscribed()) {
             return;
         }
-       mSubscription = mTuicoolApiRepository.getArticleListByTopicId(topicId, page).subscribeOn(Schedulers.io())
+       mSubscription = mTuicoolApiRepository.getArticleListByTopicId(topicId, page,lang).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         articleList -> onArticleListReceived(articleList),
@@ -134,7 +166,7 @@ public class TopicFragment extends BaseFragment {
     }
 
     private void onArticleListReceived(ArticlesWrapper articlesWrapper) {
-        Logger.i("onTopicsReceived" + articlesWrapper.getArticles().size());
+//        Logger.i("onTopicsReceived" + articlesWrapper.getArticles().size());
 
         if (mPage == 0) {
             mArticles.clear();
@@ -190,9 +222,13 @@ public class TopicFragment extends BaseFragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
-        mSubscription.unsubscribe();
 
+        mSubscriptions.unsubscribe();
+        mSubscription.unsubscribe();
     }
+
+
+
 
 
 }

@@ -1,5 +1,6 @@
 package com.lowwor.tuicool.injector.component;
 
+import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.lowwor.tuicool.TuicoolApplication;
 import com.lowwor.tuicool.api.TuicoolApiRepository;
 import com.lowwor.tuicool.db.TuicoolDatabaseRepository;
@@ -24,6 +25,6 @@ public interface AppComponent {
 
     TuicoolDatabaseRepository tuicoolDatabaseRepository();
     StorIOSQLite storIOSQLite();
-
+    RxSharedPreferences rxSharedPreferences();
 
 }
