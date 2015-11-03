@@ -24,6 +24,10 @@
         <item name="color">@android:color/white</item>
     </style>
 
+    <style name="ToolBarFeedTitle" parent="@android:style/TextAppearance">
+        <item name="android:textSize">12sp</item>
+    </style>
+
 
     <style name="AppTheme" parent="Base.Theme.AppTheme">
     </style>

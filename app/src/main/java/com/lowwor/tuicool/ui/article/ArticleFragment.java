@@ -5,6 +5,9 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.TextAppearanceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,7 @@ import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.lowwor.tuicool.R;
 import com.lowwor.tuicool.api.TuicoolApiRepository;
@@ -43,6 +47,8 @@ public class ArticleFragment extends BaseFragment {
     WebView mWebView;
     @Bind(R.id.toolbar)
     Toolbar mToolbar;
+    @Bind(R.id.tv_title)
+    TextView mTitle;
 
 
     @Inject
@@ -127,9 +133,13 @@ public class ArticleFragment extends BaseFragment {
     private void initToolbar() {
         ((AppCompatActivity) getActivity()).setSupportActionBar(mToolbar);
         ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        SpannableString spanText = new SpannableString(mArticle.title+"     "+mArticle.feedTitle);
+        spanText.setSpan(new TextAppearanceSpan(getActivity(), R.style.ToolBarFeedTitle), mArticle.title.length(), spanText.length(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE);
+
+        mTitle.setText(spanText);
+        mTitle.postDelayed(() -> mTitle.setSelected(true), 1738);
+        mTitle.setSelected(true);
         if (actionBar != null) {
-            actionBar.setTitle(mArticle.title);
-            actionBar.setSubtitle(mArticle.feedTitle + "   " + mArticle.time);
             actionBar.setDisplayHomeAsUpEnabled(false);
         }
     }

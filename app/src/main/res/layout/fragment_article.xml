@@ -21,10 +21,23 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="96dp"
+            android:layout_height="wrap_content"
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:singleLine="true"
+                android:ellipsize="marquee"
+                android:scrollHorizontally="true"
+                android:textSize="18dp"
+                android:textColor="#fafafa"
+                android:marqueeRepeatLimit="marquee_forever"
+
+
+                />
         </android.support.v7.widget.Toolbar>
         <ProgressBar
             android:id="@+id/pb_loading"
@@ -36,18 +49,14 @@
     </android.support.design.widget.AppBarLayout>
 
 
-
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        >
+<!--Fix horizontal scroll problem -->
 
         <WebView
             android:id="@+id/webview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-    </android.support.v4.widget.NestedScrollView>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="?attr/actionBarSize"
+            />
 
 
 </android.support.design.widget.CoordinatorLayout >
