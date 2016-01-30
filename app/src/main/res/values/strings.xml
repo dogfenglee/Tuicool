@@ -19,14 +19,5 @@
     <string name="action_settings">Settings</string>
 
 
-    <string-array name="v2ex_favorite_tab_titles">
-        <item>技术</item>
-
-    </string-array>
-
-    <string-array name="v2ex_favorite_tab_paths">
-        <item>11080010</item>
-
-    </string-array>
 
 </resources>
