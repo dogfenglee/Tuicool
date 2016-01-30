@@ -1,5 +1,6 @@
 package com.lowwor.tuicool.injector;
 
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -7,11 +8,11 @@ import android.support.annotation.NonNull;
 
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.lowwor.tuicool.TuicoolApplication;
-import com.lowwor.tuicool.db.DbOpenHelper;
-import com.lowwor.tuicool.model.HotTopicsItem;
-import com.lowwor.tuicool.model.HotTopicsItemStorIOSQLiteDeleteResolver;
-import com.lowwor.tuicool.model.HotTopicsItemStorIOSQLiteGetResolver;
-import com.lowwor.tuicool.model.HotTopicsItemStorIOSQLitePutResolver;
+import com.lowwor.tuicool.data.db.DbOpenHelper;
+import com.lowwor.tuicool.data.model.HotTopicsItem;
+import com.lowwor.tuicool.data.model.HotTopicsItemStorIOSQLiteDeleteResolver;
+import com.lowwor.tuicool.data.model.HotTopicsItemStorIOSQLiteGetResolver;
+import com.lowwor.tuicool.data.model.HotTopicsItemStorIOSQLitePutResolver;
 import com.lowwor.tuicool.utils.Constants;
 import com.pushtorefresh.storio.sqlite.SQLiteTypeMapping;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;

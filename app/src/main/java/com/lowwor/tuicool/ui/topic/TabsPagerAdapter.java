@@ -7,7 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 
-import com.lowwor.tuicool.model.HotTopicsItem;
+import com.lowwor.tuicool.data.model.HotTopicsItem;
 import com.orhanobut.logger.Logger;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.lowwor.tuicool.api.exceptions;
+package com.lowwor.tuicool.data.api.exceptions;
 
 public class NetworkTimeOutException extends Exception {
 }

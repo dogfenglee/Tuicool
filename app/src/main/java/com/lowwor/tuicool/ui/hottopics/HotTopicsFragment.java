@@ -9,14 +9,14 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lowwor.tuicool.R;
-import com.lowwor.tuicool.api.TuicoolApiRepository;
-import com.lowwor.tuicool.api.exceptions.NetworkErrorException;
-import com.lowwor.tuicool.api.exceptions.NetworkTimeOutException;
-import com.lowwor.tuicool.api.exceptions.NetworkUknownHostException;
-import com.lowwor.tuicool.db.TuicoolDatabaseRepository;
-import com.lowwor.tuicool.model.HotTopicsCatalog;
-import com.lowwor.tuicool.model.HotTopicsItem;
-import com.lowwor.tuicool.model.HotTopicsWrapper;
+import com.lowwor.tuicool.data.api.TuicoolApiRepository;
+import com.lowwor.tuicool.data.api.exceptions.NetworkErrorException;
+import com.lowwor.tuicool.data.api.exceptions.NetworkTimeOutException;
+import com.lowwor.tuicool.data.api.exceptions.NetworkUknownHostException;
+import com.lowwor.tuicool.data.db.TuicoolDatabaseRepository;
+import com.lowwor.tuicool.data.model.HotTopicsCatalog;
+import com.lowwor.tuicool.data.model.HotTopicsItem;
+import com.lowwor.tuicool.data.model.HotTopicsWrapper;
 import com.lowwor.tuicool.ui.base.BaseFragment;
 import com.orhanobut.logger.Logger;
 

@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lowwor.tuicool.R;
-import com.lowwor.tuicool.model.Article;
+import com.lowwor.tuicool.data.model.Article;
 import com.lowwor.tuicool.ui.article.ArticleActivity;
 
 import java.util.ArrayList;

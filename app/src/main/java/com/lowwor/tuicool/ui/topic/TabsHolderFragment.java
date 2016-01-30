@@ -15,8 +15,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.lowwor.tuicool.R;
-import com.lowwor.tuicool.db.TuicoolDatabaseRepository;
-import com.lowwor.tuicool.model.HotTopicsItem;
+import com.lowwor.tuicool.data.db.TuicoolDatabaseRepository;
+import com.lowwor.tuicool.data.model.HotTopicsItem;
+import com.lowwor.tuicool.ui.MainActivity;
 import com.lowwor.tuicool.ui.base.BaseFragment;
 import com.lowwor.tuicool.ui.hottopics.HotTopicsActivity;
 import com.lowwor.tuicool.utils.Constants;

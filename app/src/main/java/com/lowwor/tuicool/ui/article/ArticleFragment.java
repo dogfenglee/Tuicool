@@ -19,12 +19,12 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.lowwor.tuicool.R;
-import com.lowwor.tuicool.api.TuicoolApiRepository;
-import com.lowwor.tuicool.api.exceptions.NetworkErrorException;
-import com.lowwor.tuicool.api.exceptions.NetworkTimeOutException;
-import com.lowwor.tuicool.api.exceptions.NetworkUknownHostException;
-import com.lowwor.tuicool.model.Article;
-import com.lowwor.tuicool.model.ArticleWrapper;
+import com.lowwor.tuicool.data.api.TuicoolApiRepository;
+import com.lowwor.tuicool.data.api.exceptions.NetworkErrorException;
+import com.lowwor.tuicool.data.api.exceptions.NetworkTimeOutException;
+import com.lowwor.tuicool.data.api.exceptions.NetworkUknownHostException;
+import com.lowwor.tuicool.data.model.Article;
+import com.lowwor.tuicool.data.model.ArticleWrapper;
 import com.lowwor.tuicool.ui.base.BaseFragment;
 import com.orhanobut.logger.Logger;
 

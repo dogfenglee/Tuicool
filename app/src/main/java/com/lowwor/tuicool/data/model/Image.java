@@ -1,4 +1,4 @@
-package com.lowwor.tuicool.model;
+package com.lowwor.tuicool.data.model;
 
 import com.google.gson.annotations.SerializedName;
 import com.hannesdorfmann.parcelableplease.annotation.ParcelablePlease;

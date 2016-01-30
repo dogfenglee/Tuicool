@@ -1,4 +1,4 @@
-package com.lowwor.tuicool.ui.topic;
+package com.lowwor.tuicool.ui;
 
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -16,6 +16,7 @@ import com.lowwor.tuicool.injector.component.TopicComponent;
 import com.lowwor.tuicool.injector.module.FragmentModule;
 import com.lowwor.tuicool.injector.module.TopicModule;
 import com.lowwor.tuicool.ui.base.BaseActivity;
+import com.lowwor.tuicool.ui.topic.TabsHolderFragment;
 import com.orhanobut.logger.Logger;
 
 import butterknife.Bind;

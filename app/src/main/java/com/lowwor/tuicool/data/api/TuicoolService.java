@@ -1,8 +1,8 @@
-package com.lowwor.tuicool.api;
+package com.lowwor.tuicool.data.api;
 
-import com.lowwor.tuicool.model.ArticleWrapper;
-import com.lowwor.tuicool.model.ArticlesWrapper;
-import com.lowwor.tuicool.model.HotTopicsWrapper;
+import com.lowwor.tuicool.data.model.ArticleWrapper;
+import com.lowwor.tuicool.data.model.ArticlesWrapper;
+import com.lowwor.tuicool.data.model.HotTopicsWrapper;
 
 import retrofit.http.GET;
 import retrofit.http.Path;

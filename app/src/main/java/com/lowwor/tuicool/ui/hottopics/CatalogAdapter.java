@@ -13,7 +13,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.lowwor.tuicool.R;
-import com.lowwor.tuicool.model.HotTopicsCatalog;
+import com.lowwor.tuicool.data.model.HotTopicsCatalog;
 
 import java.util.ArrayList;
 import java.util.List;

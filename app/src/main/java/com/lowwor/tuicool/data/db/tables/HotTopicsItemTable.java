@@ -1,4 +1,4 @@
-package com.lowwor.tuicool.db.tables;
+package com.lowwor.tuicool.data.db.tables;
 
 import android.support.annotation.NonNull;
 

@@ -1,4 +1,4 @@
-package com.lowwor.tuicool.api;
+package com.lowwor.tuicool.data.api;
 
 /**
  * Created by lowworker on 2015/9/19.

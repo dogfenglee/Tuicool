@@ -1,8 +1,8 @@
 package com.lowwor.tuicool.injector.module;
 
 
-import com.lowwor.tuicool.api.TuicoolApiRepository;
-import com.lowwor.tuicool.db.TuicoolDatabaseRepository;
+import com.lowwor.tuicool.data.api.TuicoolApiRepository;
+import com.lowwor.tuicool.data.db.TuicoolDatabaseRepository;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 
 import javax.inject.Singleton;

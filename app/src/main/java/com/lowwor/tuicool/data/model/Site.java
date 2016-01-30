@@ -1,10 +1,11 @@
-package com.lowwor.tuicool.model;
+package com.lowwor.tuicool.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 import com.hannesdorfmann.parcelableplease.annotation.ParcelablePlease;
+
 
 /**
  * Created by lowworker on 2015/9/20.

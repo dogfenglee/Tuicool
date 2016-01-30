@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.lowwor.tuicool.R;
-import com.lowwor.tuicool.db.TuicoolDatabaseRepository;
-import com.lowwor.tuicool.model.HotTopicsItem;
+import com.lowwor.tuicool.data.db.TuicoolDatabaseRepository;
+import com.lowwor.tuicool.data.model.HotTopicsItem;
 
 import java.util.ArrayList;
 import java.util.List;

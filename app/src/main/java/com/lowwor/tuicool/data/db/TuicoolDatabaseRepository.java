@@ -1,7 +1,7 @@
-package com.lowwor.tuicool.db;
+package com.lowwor.tuicool.data.db;
 
-import com.lowwor.tuicool.db.tables.HotTopicsItemTable;
-import com.lowwor.tuicool.model.HotTopicsItem;
+import com.lowwor.tuicool.data.db.tables.HotTopicsItemTable;
+import com.lowwor.tuicool.data.model.HotTopicsItem;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;
 import com.pushtorefresh.storio.sqlite.queries.Query;
 

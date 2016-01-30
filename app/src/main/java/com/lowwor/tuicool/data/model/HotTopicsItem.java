@@ -1,11 +1,11 @@
-package com.lowwor.tuicool.model;
+package com.lowwor.tuicool.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 import com.hannesdorfmann.parcelableplease.annotation.ParcelablePlease;
-import com.lowwor.tuicool.db.tables.HotTopicsItemTable;
+import com.lowwor.tuicool.data.db.tables.HotTopicsItemTable;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteColumn;
 import com.pushtorefresh.storio.sqlite.annotations.StorIOSQLiteType;
 

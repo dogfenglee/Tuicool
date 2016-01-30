@@ -1,12 +1,12 @@
-package com.lowwor.tuicool.api;
+package com.lowwor.tuicool.data.api;
 
 import android.accounts.NetworkErrorException;
 
-import com.lowwor.tuicool.api.exceptions.NetworkTimeOutException;
-import com.lowwor.tuicool.api.exceptions.NetworkUknownHostException;
-import com.lowwor.tuicool.model.ArticleWrapper;
-import com.lowwor.tuicool.model.ArticlesWrapper;
-import com.lowwor.tuicool.model.HotTopicsWrapper;
+import com.lowwor.tuicool.data.api.exceptions.NetworkTimeOutException;
+import com.lowwor.tuicool.data.api.exceptions.NetworkUknownHostException;
+import com.lowwor.tuicool.data.model.ArticleWrapper;
+import com.lowwor.tuicool.data.model.ArticlesWrapper;
+import com.lowwor.tuicool.data.model.HotTopicsWrapper;
 import com.orhanobut.logger.Logger;
 
 import java.net.ConnectException;

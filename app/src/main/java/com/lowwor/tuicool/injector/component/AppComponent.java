@@ -2,8 +2,8 @@ package com.lowwor.tuicool.injector.component;
 
 import com.f2prateek.rx.preferences.RxSharedPreferences;
 import com.lowwor.tuicool.TuicoolApplication;
-import com.lowwor.tuicool.api.TuicoolApiRepository;
-import com.lowwor.tuicool.db.TuicoolDatabaseRepository;
+import com.lowwor.tuicool.data.api.TuicoolApiRepository;
+import com.lowwor.tuicool.data.db.TuicoolDatabaseRepository;
 import com.lowwor.tuicool.injector.AppModule;
 import com.lowwor.tuicool.injector.module.RepositoryModule;
 import com.pushtorefresh.storio.sqlite.StorIOSQLite;

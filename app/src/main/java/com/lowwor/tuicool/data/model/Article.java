@@ -1,4 +1,4 @@
-package com.lowwor.tuicool.model;
+package com.lowwor.tuicool.data.model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

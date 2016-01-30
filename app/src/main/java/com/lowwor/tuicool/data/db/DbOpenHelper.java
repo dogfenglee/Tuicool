@@ -1,11 +1,11 @@
-package com.lowwor.tuicool.db;
+package com.lowwor.tuicool.data.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.NonNull;
 
-import com.lowwor.tuicool.db.tables.HotTopicsItemTable;
+import com.lowwor.tuicool.data.db.tables.HotTopicsItemTable;
 
 /**
  * Created by lowworker on 2015/9/27.

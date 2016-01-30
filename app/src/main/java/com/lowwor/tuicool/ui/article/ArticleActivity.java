@@ -9,8 +9,9 @@ import com.lowwor.tuicool.injector.component.ArticleComponent;
 import com.lowwor.tuicool.injector.component.DaggerArticleComponent;
 import com.lowwor.tuicool.injector.module.ArticleModule;
 import com.lowwor.tuicool.injector.module.FragmentModule;
-import com.lowwor.tuicool.model.Article;
+import com.lowwor.tuicool.data.model.Article;
 import com.lowwor.tuicool.ui.base.BaseActivity;
+
 
 /**
  * Created by lowworker on 2015/9/20.
