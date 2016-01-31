@@ -2,6 +2,7 @@ package com.lowwor.tuicool.ui.hottopics;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,7 +27,10 @@ public class HotTopicAdapter extends RecyclerView.Adapter<HotTopicAdapter.ViewHo
     Context mContext;
     List<HotTopicsItem> mTopics = new ArrayList<>();
     HotTopicClickListener mHotTopicClickListener;
-    private static enum SubscribeType { SUBSCRIBED, NOT_SUBSCRIBED }
+
+    private static enum SubscribeType {SUBSCRIBED, NOT_SUBSCRIBED}
+
+    private SparseBooleanArray mSubscribeItems = new SparseBooleanArray();
 
     TuicoolDatabaseRepository mTuicoolDatabaseRepository;
 
@@ -41,30 +45,44 @@ public class HotTopicAdapter extends RecyclerView.Adapter<HotTopicAdapter.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.item_hot_topic, viewGroup, false);
-        return new ViewHolder(v, mHotTopicClickListener);
+        return new ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int i) {
+    public void onBindViewHolder(ViewHolder viewHolder, int pos) {
 
-        HotTopicsItem hotTopic = mTopics.get(i);
+        HotTopicsItem hotTopic = mTopics.get(pos);
 
         viewHolder.tvName.setText(hotTopic.name);
         Glide.with(mContext).load(hotTopic.image).into(viewHolder.ivAvatar);
 
         if (mTuicoolDatabaseRepository.isSubscribe(hotTopic)) {
-            viewHolder.ivSubscribe.setTag(R.id.iv_subscribe, SubscribeType.SUBSCRIBED);
-            viewHolder.ivSubscribe.setBackgroundResource(R.drawable.ic_action_done);
+            mSubscribeItems.put(pos, true);
         } else {
-            viewHolder.ivSubscribe.setTag(R.id.iv_subscribe, SubscribeType.NOT_SUBSCRIBED);
-            viewHolder.ivSubscribe.setBackgroundResource(R.drawable.ic_action_add);
+            mSubscribeItems.delete(pos);
         }
+        viewHolder.ivIsSubscribed.setVisibility(mSubscribeItems.get(pos, false) ? View.VISIBLE : View.GONE);
+        viewHolder.itemView.setOnClickListener(v -> {
+            if (isPositionSubscribed(viewHolder.getAdapterPosition())) {
+                mSubscribeItems.delete(viewHolder.getAdapterPosition());
+            } else {
+                mSubscribeItems.put(viewHolder.getAdapterPosition(),true);
+            }
+            viewHolder.ivIsSubscribed.setVisibility(mSubscribeItems.get(pos, false) ? View.VISIBLE : View.GONE);
+            mHotTopicClickListener.onHotTopicClick(viewHolder.getAdapterPosition());
 
+        });
     }
+
+
 
     @Override
     public int getItemCount() {
         return mTopics.size();
+    }
+
+    private boolean isPositionSubscribed(int position) {
+        return mSubscribeItems.get(position, false);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -73,31 +91,13 @@ public class HotTopicAdapter extends RecyclerView.Adapter<HotTopicAdapter.ViewHo
         TextView tvName;
         @Bind(R.id.iv_avatar)
         ImageView ivAvatar;
-        @Bind(R.id.iv_subscribe)
-        ImageView ivSubscribe;
+        @Bind(R.id.iv_is_subscribed)
+        ImageView ivIsSubscribed;
 
-        public ViewHolder(View view, HotTopicClickListener hotTopicClickListener) {
+        public ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
-            bindListener(view, hotTopicClickListener);
 
-        }
-
-        private void bindListener(View view, final HotTopicClickListener hotTopicClickListener) {
-
-            ivSubscribe.setOnClickListener(
-                    v ->
-                    {
-                        SubscribeType subscibedType = (SubscribeType)ivSubscribe.getTag(R.id.iv_subscribe);
-                        if (subscibedType== SubscribeType.SUBSCRIBED) {
-                            ivSubscribe.setBackgroundResource(R.drawable.ic_action_add);
-                        } else if(subscibedType== SubscribeType.NOT_SUBSCRIBED){
-                            ivSubscribe.setBackgroundResource(R.drawable.ic_action_done);
-                        }
-                        hotTopicClickListener.onHotTopicClick(getPosition());
-
-                    }
-            );
         }
     }
 
