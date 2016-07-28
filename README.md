@@ -1,6 +1,9 @@
+### DEPRECATED
+This project is no longer maintained.
+
 # Tuicool
 ======
-Under development.
+Tuicool is an unofficial client for tuicool.com
 
 Libraries
 ---------
